@@ -55,18 +55,18 @@ const EventSchema = new Schema({
     },
     isFree: {
         type: Boolean,
-        default: false
+        default: false,
     },
     url: {
         type: String
     },
     category: {
         type: Schema.Types.ObjectId,
-        ref: 'Catergory'
+        ref: 'Catergory',
     },
     organizer: {
         type: Schema.Types.ObjectId,
-        ref: 'Users'
+        ref: 'Users',
     },
 })
 
