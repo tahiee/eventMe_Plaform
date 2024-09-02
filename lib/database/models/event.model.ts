@@ -54,7 +54,7 @@ const EventSchema = new Schema({
         type: String,
     },
     isFree: {
-        trype: Boolean,
+        type: Boolean,
         default: false
     },
     url: {
