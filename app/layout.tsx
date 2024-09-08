@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import { ClerkProvider } from '@clerk/nextjs'
+import { ClerkProvider } from "@clerk/nextjs";
 
 import "./globals.css";
 
@@ -11,10 +11,34 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "EventMe",
+  title: "EventMe - Best Event Management App",
   description:
-    "Event Managment App EventMe & EevntMe is a platform for event managemnt app",
-    icons:'../public/assets/images/logo2.png'
+    "Event Management App EventMe & EventMe is a platform for event management.",
+  icons: {
+    icon: "/assets/images/logo2.png",
+    shortcut: "/favicon.ico",
+  },
+  openGraph: {
+    title: "EventMe - Best Event Management App",
+    description:
+      "EventMe simplifies event management for businesses and individuals.",
+    url: "https://eventme-flame.vercel.app",
+    images: [
+      {
+        url: "/assets/images/logo2.png",
+        width: 800,
+        height: 600,
+        alt: "EventMe Banner",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "EventMe - Best Event Management App",
+    description:
+      "EventMe simplifies event management for businesses and individuals.",
+    images: ["/assets/images/logo2.png"],
+  },
 };
 
 export default function RootLayout({
@@ -24,10 +48,10 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-    <html lang="en">
-    <link rel="icon" href="./favicon.ico"/>
-      <body className={poppins.variable}>{children}</body>
-    </html>
+      <html lang="en">
+        <link rel="icon" href="./favicon.ico" />
+        <body className={poppins.variable}>{children}</body>
+      </html>
     </ClerkProvider>
   );
 }
