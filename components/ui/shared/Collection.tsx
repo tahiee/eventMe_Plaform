@@ -2,7 +2,7 @@ import { IEvent } from "@/lib/database/models/event.model";
 import Card from "./Card";
 
 type CollectionProps = {
-  data: IEvent[];
+  data?: IEvent[];
   emptyTitle: string;
   emptyStateSubtext: string;
   limit: number;
@@ -13,7 +13,7 @@ type CollectionProps = {
 };
 
 const Collection = ({
-  data,
+  data=[],
   emptyTitle,
   emptyStateSubtext,
   page,

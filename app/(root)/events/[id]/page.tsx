@@ -4,11 +4,23 @@ import Image from "next/image";
 import Calandersvg from "../../../../public/assets/icons/calendar.svg";
 import Locationsvg from "../../../../public/assets/icons/location.svg";
 import { formatDateTime } from "@/lib/utils";
+import Collection from "@/components/ui/shared/Collection";
+import { getRelatedEventsByCategory } from "@/lib/actions/event.actions";
 
-const EventDetails = async ({ params: { id } }: SearchParamProps) => {
+const EventDetails = async ({
+  params: { id },
+  searchParams,
+}: SearchParamProps) => {
   const event = await getEventById(id);
   console.log(event);
 
+  const relatedEvents = getRelatedEventsByCategory({
+    categoryId: event.category._id,
+    eventId: event._id,
+    page: searchParams.page as string,
+  });
+
+  const relatedEventData = await relatedEvents;
   return (
     <>
       <section className="flex justify-center bg-primary-50 bg-dotted-pattern bg-contain">
@@ -86,6 +98,21 @@ const EventDetails = async ({ params: { id } }: SearchParamProps) => {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* EVENTS FROM THE SAME ORGANIZER */}
+      <section className="wrapper my-8 gap-8 flex-col flex md:gap-12 ">
+        <h2 className="h2-bold">Related Events</h2>
+
+        <Collection
+          data={relatedEventData?.data}
+          emptyTitle="No Events Found"
+          emptyStateSubtext="Come Back Later"
+          collectionType="All_Events"
+          limit={6}
+          page={1}
+          totalPages={2}
+        />
       </section>
     </>
   );
