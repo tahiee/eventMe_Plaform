@@ -1,4 +1,5 @@
-import { getEventById } from "@/lib/actions/order.actions";
+import { getEventById } from "@/lib/actions/event.actions";
+// change here order to event
 import { SearchParamProps } from "@/types";
 import Image from "next/image";
 import Calandersvg from "../../../../public/assets/icons/calendar.svg";
@@ -6,6 +7,7 @@ import Locationsvg from "../../../../public/assets/icons/location.svg";
 import { formatDateTime } from "@/lib/utils";
 import Collection from "@/components/ui/shared/Collection";
 import { getRelatedEventsByCategory } from "@/lib/actions/event.actions";
+import CheckOutButton from "@/components/ui/shared/CheckOutButton";
 
 const EventDetails = async ({
   params: { id },
@@ -56,7 +58,9 @@ const EventDetails = async ({
               </div>
             </div>
 
-            {/* <CheckoutButton event={event} /> */}
+            {/* CheckoutButton*/}
+          <CheckOutButton event={event}/>
+
 
             <div className="flex flex-col gap-5">
               <div className="flex gap-2 md:gap-3">
@@ -69,9 +73,9 @@ const EventDetails = async ({
                 <div className="p-medium-16 lg:p-regular-20 flex flex-wrap items-center">
                   <p>
                     {formatDateTime(event.startDateTime).dateOnly} -{" "}
-                    {formatDateTime(event.startDateTime).timeOnly}
+                    {formatDateTime(event.startDateTime).timeOnly} 
                   </p>
-                  <p>
+                  <p className="ml-1">
                     {formatDateTime(event.endDateTime).dateOnly} -{" "}
                     {formatDateTime(event.endDateTime).timeOnly}
                   </p>
