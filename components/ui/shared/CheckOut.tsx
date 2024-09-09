@@ -34,9 +34,6 @@ const CheckOut = ({ event, userId }: { event: IEvent; userId: string }) => {
 
     const checkoutUrl = await CheckOutOrder(order);
 
-  if (checkoutUrl) {
-    window.location.href = checkoutUrl;  // Redirect to Stripe
-  }
   };
   return (
     <>

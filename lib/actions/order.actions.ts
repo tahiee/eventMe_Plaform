@@ -1,15 +1,18 @@
-'use server';
+"use server"
 
-import { CheckoutOrderParams, CreateOrderParams } from "@/types";
 import Stripe from 'stripe';
-import { NextResponse } from 'next/server';
-import { connectToDatabase } from "../database";
-import Order from "../database/models/order.model";
+import { CheckoutOrderParams, CreateOrderParams, GetOrdersByEventParams, GetOrdersByUserParams } from "@/types"
+import { redirect } from 'next/navigation';
+import { handleError } from '../utils';
+import { connectToDatabase } from '../database';
+import Order from '../database/models/order.model';
+import User from '../database/models/users.model';
 
 export const CheckOutOrder = async (order: CheckoutOrderParams) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
   const price = order.isFree ? 0 : Number(order.price) * 100;
+
   try {
     const session = await stripe.checkout.sessions.create({
       line_items: [
@@ -21,7 +24,7 @@ export const CheckOutOrder = async (order: CheckoutOrderParams) => {
               name: order.eventTitle
             }
           },
-          quantity: 1,
+          quantity: 1
         },
       ],
       metadata: {
@@ -33,26 +36,25 @@ export const CheckOutOrder = async (order: CheckoutOrderParams) => {
       cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/`,
     });
 
-    // Return the session URL for client-side redirection
-    return session.url;
-
+    redirect(session.url!)
   } catch (error) {
     throw error;
   }
-};
-
+}
 
 export const createOrder = async (order: CreateOrderParams) => {
   try {
-    await connectToDatabase()
-
+    await connectToDatabase();
+    
     const newOrder = await Order.create({
       ...order,
       event: order.eventId,
       buyer: order.buyerId,
-    })
-      return JSON.parse(JSON.stringify(newOrder))
+    });
+
+    return JSON.parse(JSON.stringify(newOrder));
   } catch (error) {
-    throw error
+    handleError(error);
   }
 }
+
