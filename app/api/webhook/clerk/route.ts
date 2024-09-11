@@ -45,6 +45,9 @@ export async function POST(req: Request): Promise<Response> {
 
     const { id } = evt.data;
     const eventType = evt.type;
+    if (!id) {
+        return new Response(`${eventType} failed: User ID is missing`, { status: 400 });
+    }
 
     try {
         if (eventType === 'user.created') {
@@ -66,11 +69,17 @@ export async function POST(req: Request): Promise<Response> {
             const newUser = await createUser(user);
 
             if (newUser) {
-                await clerkClient.users.updateUserMetadata(id, {
-                    publicMetadata: {
-                        userId: newUser._id,
-                    },
-                });
+                try {
+                    console.log('New user created:', newUser);
+                    await clerkClient.users.updateUserMetadata(id, {
+                        publicMetadata: {
+                            userId: newUser._id,
+                        },
+                    });
+                    console.log('Metadata update successful for Clerk user:', id);
+                } catch (error) {
+                    console.log(error);
+                }
             }
 
             return NextResponse.json({ message: 'User created successfully', user: newUser });

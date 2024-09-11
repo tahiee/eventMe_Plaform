@@ -11,13 +11,22 @@ import { CreateUserParams, UpdateUserParams } from '@/types'
 
 export async function createUser(user: CreateUserParams) {
   try {
-    await connectToDatabase()
-    const newUser = await User.create(user)
-    return JSON.parse(JSON.stringify(newUser))
+    await connectToDatabase();
+
+    // Check for existing user with the same clerkId to prevent duplicates
+    const existingUser = await User.findOne({ clerkId: user.clerkId });
+    if (existingUser) {
+      return JSON.parse(JSON.stringify(existingUser));
+    }
+
+    // Create a new user
+    const newUser = await User.create(user);
+    return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
-    handleError(error)
+    handleError(error);
     throw error; // Ensure the error is propagated
   }
+
 }
 
 export async function getUserById(userId: string) {
